@@ -74,15 +74,18 @@ render.draw(field, false);
 
 window.onclick = function (e) {
     if (UI_STATE.isPlay === false && e.target.id === 'canvas') {
-        const coordX = e.clientX-UI_STATE.AbsoulteDx;
-        const coordY = e.clientY-UI_STATE.AbsoulteDy;
-        const x = (coordX - Math.abs(coordX % 10)) / 10;
-        const y = (coordY - Math.abs(coordY % 10)) / 10;
+        const coordX = e.clientX - UI_STATE.AbsoulteDx;
+        const coordY = e.clientY - UI_STATE.AbsoulteDy;
+        const x = (coordX - 10 - Math.abs(coordX % 10)) / 10;
+        const y = (coordY - 10 - Math.abs(coordY % 10)) / 10;
         const cell = new Cell(x, y, true);
-        
-        field.addToState({
-            [cell.key]: cell,
-        });
+        if (field.state[cell.key]) {
+            field.removeCell(cell);
+        } else {
+            field.addToState({
+                [cell.key]: cell,
+            });
+        }
         render.draw(field, false);
     }
 }
@@ -95,7 +98,9 @@ window.onmousedown = function (e) {
     }
 }
 window.onmousemove = function (e) {
+    let isMustBeReDraw = false;
     if (UI_STATE.isMouseHolded) {
+        isMustBeReDraw = true;
         UI_STATE.dx = e.clientX - UI_STATE.startX;
         UI_STATE.dy = e.clientY - UI_STATE.startY;
         UI_STATE.AbsoulteDx += UI_STATE.dx;
@@ -104,8 +109,25 @@ window.onmousemove = function (e) {
         UI_STATE.startX = e.clientX;
         UI_STATE.startY = e.clientY;
 
-        render.draw(field, true);
     }
+    if (e.target.id === 'canvas') {
+        UI_STATE.isRenderCursor = true;
+        isMustBeReDraw = true;
+        const coordX = e.clientX;
+        const coordY = e.clientY;
+        const x = (coordX - 10 - Math.abs(coordX % 10));
+        const y = (coordY - 10 - Math.abs(coordY % 10));
+        UI_STATE.cursorX = x;
+        UI_STATE.cursorY = y;
+    }
+
+    if (isMustBeReDraw) {
+        render.draw(field, true);
+        UI_STATE.isRenderCursor = false;
+        UI_STATE.dx = 0;
+        UI_STATE.dy = 0;
+    }
+    console.log(isMustBeReDraw);
 }
 
 window.onmouseup = function (e) {

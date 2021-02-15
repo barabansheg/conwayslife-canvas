@@ -5,7 +5,6 @@ const INIT_FIELD_HEIGHT = 100;
 const ALIVE_COLOR = "#5ffff0";
 const BACKGROUND_COLOR = "#c0c0c0";
 
-
 class Render {
     constructor(canvas) {
         this.width = UI_STATE.VIEWPORT_WIDTH;
@@ -21,6 +20,7 @@ class Render {
         this.ctx.fillStyle = BACKGROUND_COLOR;
         this.ctx.fillRect(0, 0, this.width, this.height);
         const cells = field.getItemsForRender();
+        
         for (const cell of cells) {
             this.ctx.fillStyle = ALIVE_COLOR;
             if (applyDelta) {
@@ -30,6 +30,12 @@ class Render {
                 this.ctx.fillRect(cell.renderX, cell.renderY, cell.width, cell.height);
             }
         }
+
+        if (UI_STATE.isRenderCursor === true) {
+            this.ctx.fillStyle = UI_STATE.CURSOR_COLOR;
+            this.ctx.fillRect(UI_STATE.cursorX+UI_STATE.dx, UI_STATE.cursorY+UI_STATE.dy, UI_STATE.CURSOR_WIDTH, UI_STATE.CURSOR_HEIGHT);
+        }
+
     }
 }
 

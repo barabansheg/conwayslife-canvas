@@ -10,5 +10,11 @@ const UI_STATE = {
     initMode: true,
     VIEWPORT_WIDTH: 800,
     VIEWPORT_HEIGHT: 600,
+    CURSOR_COLOR: "#ffffff",
+    CURSOR_WIDTH: 10,
+    CURSOR_HEIGHT: 10,
+    cursorX: 0,
+    cursorY: 0,
+    isRenderCursor: false,
 }
 export { UI_STATE };
